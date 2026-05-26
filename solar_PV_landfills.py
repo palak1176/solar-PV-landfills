@@ -5,7 +5,7 @@ atlanta_msa_counties = [
     "Pike", "Bartow", "Cobb", "Fayette", "Heard", "Morgan", 
     "Rockdale", "Butts", "Coweta", "Forsyth", "Henry", "Newton", 
     "Spalding", "Carroll", "Dawson", "Fulton", "Jasper", "Paulding", 
-    "Walton", "Cherokee", "DeKalb", "Gwinnett", "Lumpkin", "Pickens"]
+    "Walton", "Cherokee", "DeKalb", "Gwinnett", "Lamar", "Pickens"]
 
 def uspvdb_solar_ga_data(file_path):
     # Reads CSV file
