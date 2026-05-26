@@ -27,8 +27,8 @@ This project processes utility-scale solar photovoltaic (PV) data from the U.S. 
   - p_sys_type
   - p_type
 
-  ## Usage
-  - Download the USPVDB CSV file from [https://energy.usgs.gov/uspvdb/data/](url).
-  - Place the CSV file in the same folder as your Python script.
-  - If needed, replace the filename at the end of the script: print(uspvdb_solar_ga_data("uspvdb_v4_2026.04.14.csv"))
-  - Run the script: python solar_PV_landfills.py
+## Usage
+- Download the USPVDB CSV file from [https://energy.usgs.gov/uspvdb/data/](url).
+- Place the CSV file in the same folder as your Python script.
+- If needed, replace the filename at the end of the script: print(uspvdb_solar_ga_data("uspvdb_v4_2026.04.14.csv"))
+- Run the script: python solar_PV_landfills.py
