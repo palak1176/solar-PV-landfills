@@ -24,7 +24,7 @@ def uspvdb_solar_ga_data(file_path):
     # print(uspvdb_solar_ga_df.columns)
     
     # Check for required columns and keep only those needed for analysis
-    columns_to_keep = ['p_name', 'p_county', "p_year", 'p_state', 'p_sys_type', 'p_type'] 
+    columns_to_keep = ['p_name', 'p_county', "p_year", 'p_state', 'p_sys_type', 'p_type', "p_cap_ac", "p_cap_dc"] 
     # could include p_area 
 
     missing_cols = [col for col in columns_to_keep if col not in uspvdb_solar_ga_df.columns]
