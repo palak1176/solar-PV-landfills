@@ -24,13 +24,12 @@ def uspvdb_solar_ga_data(file_path):
     # print(uspvdb_solar_ga_df.columns)
     
     # Check for required columns and keep only those needed for analysis
-    columns_to_keep = ['p_name', 'p_county', "p_year", 'p_state', 'p_sys_type', 'p_type', "p_cap_ac", "p_cap_dc"] 
+    must_have_columns = ['p_name', 'p_county', "p_year", 'p_state', 'p_sys_type', 'p_type', "p_cap_ac", "p_cap_dc"] 
     # could include p_area 
 
-    missing_cols = [col for col in columns_to_keep if col not in uspvdb_solar_ga_df.columns]
+    missing_cols = [col for col in must_have_columns if col not in uspvdb_solar_ga_df.columns]
     if missing_cols:
         print(f"Missing columns: {missing_cols}")
-    uspvdb_solar_ga_df = uspvdb_solar_ga_df[columns_to_keep]
 
     # Clean and filter data for Georgia
     uspvdb_solar_ga_df['p_state'] = uspvdb_solar_ga_df['p_state'].fillna('').str.strip().str.upper()
@@ -79,8 +78,9 @@ def uspvdb_solar_ga_data(file_path):
 
     # Print table
     print(uspvdb_solar_ga_years.to_string(index=False))
+    print("\nTotal Solar PV Capacity on Landfills in Atlanta MSA: {:.2f} MW AC".format(uspvdb_solar_ga_df['p_cap_ac'].sum()))
 
-    return uspvdb_solar_ga_df
-    # .to_csv("atlanta_msa_solar_pv_sites.csv", index=False)
+
+    return uspvdb_solar_ga_df.to_csv("atlanta_msa_solar_pv_landfills.csv", index=False)
 
 print(uspvdb_solar_ga_data("uspvdb_v4_2026.04.14.csv"))

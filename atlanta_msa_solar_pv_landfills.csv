@@ -1,0 +1,2 @@
+case_id,multi_poly,eia_id,p_state,p_county,ylat,xlong,p_area,p_img_date,p_dig_conf,p_name,p_year,p_pwr_reg,p_tech_pri,p_tech_sec,p_sys_type,p_axis,p_azimuth,p_tilt,p_battery,p_cap_ac,p_cap_dc,p_type,p_agrivolt,p_comm,p_zscore
+401077,single,59459,GA,DeKalb,33.6635,-84.3356,43512,20220118,4,Hickory Ridge Landfill Solar Project,2011,SEPA,PV,thin-film,ground,fixed-tilt,180.0,30.0,,1.0,1.0,landfill named,non-agrivoltaic,,-0.72200924
