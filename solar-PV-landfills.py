@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 
 atlanta_msa_counties = [
@@ -20,13 +21,9 @@ def uspvdb_solar_ga_data(file_path):
     except pd.errors.ParserError:
         print("Error: There was a parsing error while reading the file.")
         return None
-    
-    # print(uspvdb_solar_ga_df.columns)
-    
+        
     # Check for required columns and keep only those needed for analysis
     must_have_columns = ['p_name', 'p_county', "p_year", 'p_state', 'p_sys_type', 'p_type', "p_cap_ac", "p_cap_dc"] 
-    # could include p_area 
-
     missing_cols = [col for col in must_have_columns if col not in uspvdb_solar_ga_df.columns]
     if missing_cols:
         print(f"Missing columns: {missing_cols}")
@@ -41,19 +38,16 @@ def uspvdb_solar_ga_data(file_path):
     atlanta_msa_counties_lower = {c.lower() for c in atlanta_msa_counties}
     uspvdb_solar_ga_df = uspvdb_solar_ga_df[uspvdb_solar_ga_df['p_county'].str.lower().isin(atlanta_msa_counties_lower)]
 
-
     # Clean 'p_type' column and filter for landfill named or landfill
     uspvdb_solar_ga_df['p_type'] = uspvdb_solar_ga_df['p_type'].fillna('').str.strip().str.lower()
-    uspvdb_solar_ga_df = uspvdb_solar_ga_df[uspvdb_solar_ga_df['p_type'].isin(['landfill named', 'landfill'])]    
+    uspvdb_solar_ga_df = uspvdb_solar_ga_df[uspvdb_solar_ga_df['p_type'].isin(['landfill named', 'landfill'])]
 
-    # # Calculate and print the number of solar PV landfill sites by type
-    # uspvdb_solar_ga_types = uspvdb_solar_ga_df.groupby('p_type').size().reset_index(name='Count')
-    # print("\nSolar PV Landfill Sites by Type:")
-    # for _, row in uspvdb_solar_ga_types.iterrows():
-    #     print(f"Type: {row['p_type']}, Count: {row['Count']}")
+    # Show which landfills have solar PV systems and the total solar PV capacity
+    print("\nLandfills in Atlanta MSA with Solar PV Systems:")
+    print(uspvdb_solar_ga_df['p_name'].to_string(index=False))
+    print("Total Solar PV Capacity on Landfills in Atlanta MSA: {:.2f} MW AC".format(uspvdb_solar_ga_df['p_cap_ac'].sum()))
     
     print("\nCumulative Solar PV Landfill Sites Over Time")
-
     # Years to evaluate
     target_years = [2005, 2015, 2025, 2026]
 
@@ -64,23 +58,32 @@ def uspvdb_solar_ga_data(file_path):
     cumulative_counts = []
 
     for year in target_years:
-        count = uspvdb_solar_ga_df[
-            uspvdb_solar_ga_df['p_year'] <= year
-        ].shape[0]
-
-        cumulative_counts.append({
-            'Year': year,
-            'Cumulative Site Count': count
-        })
+        count = uspvdb_solar_ga_df[uspvdb_solar_ga_df['p_year'] <= year].shape[0]
+        cumulative_counts.append({'Year': year, 'Cumulative Site Count': count})
 
     # Convert to DataFrame
     uspvdb_solar_ga_years = pd.DataFrame(cumulative_counts)
 
     # Print table
     print(uspvdb_solar_ga_years.to_string(index=False))
-    print("\nTotal Solar PV Capacity on Landfills in Atlanta MSA: {:.2f} MW AC".format(uspvdb_solar_ga_df['p_cap_ac'].sum()))
 
+    # Print CSV to output
+    output_path="atlanta_msa_solar_pv_landfills.csv"
+    uspvdb_solar_ga_df.to_csv(output_path, index=False)
+    print(f"\nSaved filtered data to {output_path}")
+    return uspvdb_solar_ga_df
 
-    return uspvdb_solar_ga_df.to_csv("atlanta_msa_solar_pv_landfills.csv", index=False)
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Filter the USPVDB solar PV dataset to landfill sites in the Atlanta MSA and summarize capacity/growth.")
+    parser.add_argument(
+        "csv_path",
+        help="Path to the USPVDB CSV file (e.g. 'uspvdb_v4_2026.04.14.csv')")
+    return parser.parse_args()
 
-print(uspvdb_solar_ga_data("uspvdb_v4_2026.04.14.csv"))
+def main():
+    args = parse_args()
+    uspvdb_solar_ga_data(args.csv_path)
+
+if __name__ == "__main__":
+    main()
